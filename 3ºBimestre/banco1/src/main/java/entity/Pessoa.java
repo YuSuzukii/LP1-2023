@@ -2,6 +2,9 @@ package entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="pessoa")
 public class Pessoa {
@@ -15,11 +18,21 @@ public class Pessoa {
     private String Sobrenome;
     @Column
     private String Email;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "IdEnd")
+    private Endereco endereco;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pessoa")
+    @JoinColumn(name = "IdProd")
+    private List<Pedido> pedidos = new ArrayList<>();
+    //@OnetoOne serve para ligar as tabelas 1 para 1
+    //CascadeType.ALL serve para cadastrar em um e levar p outro
 
-    public Pessoa(String nome, String sobrenome, String email) {
+
+    public Pessoa(String nome, String sobrenome, String email, Endereco endereco) {
         Nome = nome;
         Sobrenome = sobrenome;
         Email = email;
+        this.endereco = endereco;
     }
 
     public int getId() {
@@ -63,4 +76,5 @@ public class Pessoa {
                 ", Email='" + Email + '\'' +
                 '}';
     }
+    //criar classe produto, deve ter id, nome, preco, e criar pedido cm pessoa, id e lista de produtos
 }
